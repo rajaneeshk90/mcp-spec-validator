@@ -1,1 +1,0 @@
-# mcp-spec-validator
