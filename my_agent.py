@@ -2,7 +2,6 @@ from typing import Any, Dict
 from dotenv import load_dotenv
 from agents import Agent, Runner, trace
 from agents.mcp import MCPServerStdio
-from IPython.display import display, Markdown
 import json
 import asyncio
 
@@ -10,7 +9,7 @@ load_dotenv(override=True)
 
 class BecknAgent:
     def __init__(self):
-        self.params = {"command": "uv", "args": ["run", "final/mcp_server.py"]}
+        self.params = {"command": "uv", "args": ["run", "mcp_server.py"]}
         self.instructions = "User are a helpful assistant who helps validate provide \
             if a provided JSON is valid as per Beckn protocol Specification. \
             Use the provided tools only to check the validity. \

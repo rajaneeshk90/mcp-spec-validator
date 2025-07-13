@@ -8,8 +8,6 @@ dependencies = [
     "mcp>=1.0.0",
     "openai-agents==0.0.15",
     "python-dotenv>=1.0.0",
-    "ipython>=8.0.0",
-    "jupyter>=1.0.0",
     "litellm>=1.73.0",
     "httpx>=0.28.1",
     "gradio>=5.34.2",

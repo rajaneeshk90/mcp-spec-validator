@@ -2,6 +2,7 @@ from mcp.server.fastmcp import FastMCP
 from typing import Dict, Any, Union
 import json
 import httpx
+import os
 
 mcp = FastMCP("accounts_server")
 
@@ -44,7 +45,8 @@ async def valid_beckn_payload(payload: Dict[str, Any]) -> str:
     # Make POST call to Beckn OAS validator
     try:
         async with httpx.AsyncClient() as client:
-            url = f"http://oas-validator.becknprotocol.io/retail/{action}"
+            base_url = os.getenv("BECKN_VALIDATOR_URL", "http://oas-validator.becknprotocol.io/retail")
+            url = f"{base_url}/{action}"
             response = await client.post(url, json=payload, timeout=30.0)
             
             if response.status_code != 200:

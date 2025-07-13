@@ -15,11 +15,13 @@ RUN pip install uv
 # Copy pyproject.toml and uv.lock
 COPY pyproject.toml uv.lock ./
 
-# Copy the final folder
-COPY final/ ./final/
-
 # Install dependencies using uv
 RUN uv sync --frozen
+
+# Copy the final folder
+COPY . .
+
+
 
 # Expose port for Gradio
 EXPOSE 7860
@@ -30,8 +32,8 @@ ENV GRADIO_SERVER_NAME=0.0.0.0
 ENV GRADIO_SERVER_PORT=7860
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=120s --timeout=120s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:7860/ || exit 1
 
 # Run the application
-CMD ["uv", "run", "final/ui.py"] 
+CMD ["uv", "run", "ui.py"]
