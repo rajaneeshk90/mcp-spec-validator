@@ -4,7 +4,7 @@ A web-based validation tool for Beckn protocol JSON payloads using AI agents and
 
 ## 🎯 Overview
 
-This application provides a Gradio-based web interface to validate Beckn protocol JSON payloads against the specification. It uses AI agents with MCP servers to perform intelligent validation and provides detailed feedback on payload compliance.
+This application provides a Gradio-based web interface to validate Beckn protocol JSON payloads against the specification. It uses AI agents with MCP servers to perform intelligent validation and provides detailed feedback on payload compliance. The MCP server communicates with a Beckn OAS validator service that can be either an internal Kubernetes service or the global external validator.
 
 ## ✨ Features
 
@@ -22,12 +22,23 @@ This application provides a Gradio-based web interface to validate Beckn protoco
 │   Gradio UI     │───▶│   AI Agent       │───▶│   MCP Server        │
 │   (Port 7860)   │    │   (OpenAI)       │    │   (Validation)      │
 └─────────────────┘    └──────────────────┘    └─────────────────────┘
-                                │                        │
-                                ▼                        ▼
-                       ┌──────────────────┐    ┌─────────────────────┐
-                       │   Beckn OAS      │    │   Internal Validator│
-                       │   Validator      │    │   Service           │
-                       └──────────────────┘    └─────────────────────┘
+                                                          │
+                                                          ▼
+                                    ┌─────────────────────────────────┐
+                                    │   Beckn OAS Validator Service   │
+                                    │                                 │
+                                    │  ┌─────────────────────────────┐ │
+                                    │  │ Internal K8s Service        │ │
+                                    │  │ (oas31-validator-service)   │ │
+                                    │  │ ClusterIP in same namespace │ │
+                                    │  └─────────────────────────────┘ │
+                                    │                                 │
+                                    │  ┌─────────────────────────────┐ │
+                                    │  │ External Global Service     │ │
+                                    │  │ (oas-validator.becknprotocol│ │
+                                    │  │ .io/retail)                 │ │
+                                    │  └─────────────────────────────┘ │
+                                    └─────────────────────────────────┘
 ```
 
 ## 🚀 Quick Start
@@ -147,6 +158,20 @@ mcp-spec-validator/
 | `OPENAI_API_KEY` | OpenAI API key for AI agent | Required |
 | `GEMINI_API_KEY` | Google/Gemini API key | Required |
 | `BECKN_VALIDATOR_URL` | Beckn validator service URL | `http://oas-validator.becknprotocol.io/retail` |
+
+### Validator Service Options
+
+The application can use either of two Beckn OAS validator services:
+
+1. **Internal Kubernetes Service** (Recommended for production)
+   - Service: `oas31-validator-service` (ClusterIP in same namespace)
+   - URL: `http://oas31-validator-service`
+   - **Advantages**: Faster response, no external dependencies, controlled lifecycle
+
+2. **External Global Service** (Fallback)
+   - Service: `http://oas-validator.becknprotocol.io/retail`
+   - **Advantages**: Always available, managed by Beckn Protocol organization
+   - **Disadvantages**: External dependency, no control over availability
 
 ### Kubernetes Configuration
 
