@@ -46,6 +46,8 @@ async def valid_beckn_payload(payload: Dict[str, Any]) -> str:
     try:
         async with httpx.AsyncClient() as client:
             base_url = os.getenv("BECKN_VALIDATOR_URL", "http://oas-validator.becknprotocol.io/retail")
+            print(f"BECKN_VALIDATOR_URL from env: {os.getenv('BECKN_VALIDATOR_URL')}")
+            print(f"Using base_url: {base_url}")
             url = f"{base_url}/{action}"
             response = await client.post(url, json=payload, timeout=30.0)
             

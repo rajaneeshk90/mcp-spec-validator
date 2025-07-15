@@ -5,7 +5,7 @@ metadata:
   name: mcp-config
   namespace: beckn-spec
 data:
-  BECKN_VALIDATOR_URL: "http://oas31-validator-service"
+  BECKN_VALIDATOR_URL: "http://oas31-validator-service/retail"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,6 +44,11 @@ spec:
             secretKeyRef:
               name: my-api-keys
               key: GEMINI_API_KEY
+        - name: BECKN_VALIDATOR_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mcp-config
+              key: BECKN_VALIDATOR_URL
 ---
 
 apiVersion: v1

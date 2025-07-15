@@ -9,7 +9,12 @@ load_dotenv(override=True)
 
 class BecknAgent:
     def __init__(self):
-        self.params = {"command": "uv", "args": ["run", "mcp_server.py"]}
+        import os
+        self.params = {
+            "command": "uv", 
+            "args": ["run", "mcp_server.py"],
+            "env": {"BECKN_VALIDATOR_URL": os.getenv("BECKN_VALIDATOR_URL", "http://oas-validator.becknprotocol.io/retail")}
+        }
         self.instructions = "User are a helpful assistant who helps validate provide \
             if a provided JSON is valid as per Beckn protocol Specification. \
             Use the provided tools only to check the validity. \
