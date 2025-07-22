@@ -22,12 +22,14 @@ class BecknAgent:
             "
         self.request = "check if the below JSON is valid as per Beckn protocol Specification. "
         self.model = "litellm/gemini/gemini-1.5-pro"
+        #what is this litellm/gemini/gemini-1.5-pro?
     
 
     async def run(self, beckn_payload: Dict[str, Any]):
         query = self.request + json.dumps(beckn_payload)
         async with MCPServerStdio(params=self.params) as mcp_server:
             agent = Agent(name="specification_expert", instructions=self.instructions, model=self.model, mcp_servers=[mcp_server])
+            #print the above llm and check which provider llm is that.
             with trace("specification_expert"):
                 result = await Runner.run(agent, query)
             return result.final_output
