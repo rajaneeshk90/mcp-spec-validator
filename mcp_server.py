@@ -4,7 +4,7 @@ import json
 import httpx
 import os
 
-mcp = FastMCP("accounts_server")
+mcp = FastMCP("spec_server")
 
 ALLOWED_ACTIONS = {
     "search", "on_search", "select", "on_select", "init", "on_init",
