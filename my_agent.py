@@ -4,6 +4,7 @@ from agents import Agent, Runner, trace
 from agents.mcp import MCPServerStdio
 import json
 import asyncio
+import inspect
 
 load_dotenv(override=True)
 
@@ -21,17 +22,25 @@ class BecknAgent:
             dont use any other source of truth to check validity. \
             "
         self.request = "check if the below JSON is valid as per Beckn protocol Specification. "
+        #we are using agent from PyPI, not from OpenAI’s official SDK or from E2B.
+        # what we are using(openai-agents) is a third-party community package, 
+        # published by @cfortuner. It Wraps litellm under the hood for LLM calls.
+        #this library wraps litellm for routing to providers. litellm needs to 
+        # be installed.
         self.model = "litellm/gemini/gemini-1.5-pro"
-        #what is this litellm/gemini/gemini-1.5-pro?
     
 
     async def run(self, beckn_payload: Dict[str, Any]):
         query = self.request + json.dumps(beckn_payload)
         async with MCPServerStdio(params=self.params) as mcp_server:
             agent = Agent(name="specification_expert", instructions=self.instructions, model=self.model, mcp_servers=[mcp_server])
+            print("agent in print")
+            print(agent)
             #print the above llm and check which provider llm is that.
             with trace("specification_expert"):
                 result = await Runner.run(agent, query)
+                print("result in print")
+                print(result)
             return result.final_output
 
 async def run_agent():
